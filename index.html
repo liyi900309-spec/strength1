@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>性格优势自测 · 24种优势与六大美德</title>
+<style>
+  :root {
+    --bg: #EEF0E6;
+    --bg-raise: #E4E7DA;
+    --ink: #23241F;
+    --ink-soft: #5B5D51;
+    --line: #C9CCBC;
+    --card: #F6F7F0;
+    --accent: #4A5A3A;
+    --accent-ink: #F6F7F0;
+
+    --v-wisdom: #45527F;
+    --v-courage: #B08339;
+    --v-humanity: #A15068;
+    --v-justice: #3E6B72;
+    --v-temperance: #64753F;
+    --v-transcendence: #6C4C8F;
+
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1B1C18;
+      --bg-raise: #232420;
+      --ink: #ECEBE2;
+      --ink-soft: #A5A79A;
+      --line: #3A3C33;
+      --card: #212219;
+      --accent: #B7C79A;
+      --accent-ink: #1B1C18;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1B1C18;
+    --bg-raise: #232420;
+    --ink: #ECEBE2;
+    --ink-soft: #A5A79A;
+    --line: #3A3C33;
+    --card: #212219;
+    --accent: #B7C79A;
+    --accent-ink: #1B1C18;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100%;
+  }
+  h1, h2, h3, .serif {
+    font-family: Georgia, "Songti SC", "STSong", "SimSun", serif;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 28px 20px 64px;
+  }
+  a { color: inherit; }
+
+  /* ---- top bar ---- */
+  .topbar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 10;
+    background: var(--bg);
+    padding: 10px 20px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar-inner { max-width: 640px; margin: 0 auto; }
+  .brand {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .brand-title { font-size: 15px; color: var(--ink-soft); letter-spacing: 0.02em; }
+  .brand-count { font-size: 13px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .segs { display: flex; gap: 4px; }
+  .seg {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--line);
+    overflow: hidden;
+  }
+  .seg > i {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: var(--seg-color, var(--accent));
+    transition: width .35s ease;
+  }
+
+  /* ---- intro ---- */
+  .hero { padding: 18px 0 8px; }
+  .hero h1 { font-size: 30px; line-height: 1.3; margin: 0 0 14px; }
+  .hero p { font-size: 16px; line-height: 1.75; color: var(--ink-soft); margin: 0 0 14px; }
+  .virtue-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 30px; }
+  .chip {
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--bg-raise);
+    border: 1px solid var(--line);
+    color: var(--ink);
+  }
+  .chip i { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:6px; background: var(--dot); vertical-align: middle; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 22px;
+    font-size: 16px;
+    font-family: inherit;
+    cursor: pointer;
+    background: var(--accent);
+    color: var(--accent-ink);
+    width: 100%;
+    transition: opacity .15s ease, transform .1s ease;
+  }
+  .btn:active { transform: scale(0.985); }
+  .btn[disabled] { opacity: 0.35; cursor: not-allowed; }
+  .btn.ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  .btn-row { display: flex; gap: 10px; margin-top: 22px; }
+  .btn-row .btn { width: auto; flex: 1; }
+
+  .note { font-size: 13px; color: var(--ink-soft); text-align: center; margin-top: 10px; }
+
+  /* ---- quiz section ---- */
+  .virtue-head { margin: 22px 0 6px; }
+  .virtue-head .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    color: var(--v-color, var(--accent));
+    margin-bottom: 8px;
+  }
+  .virtue-head .tag i { width: 8px; height: 8px; border-radius: 50%; background: var(--v-color, var(--accent)); }
+  .virtue-head h2 { font-size: 22px; margin: 0 0 6px; }
+  .virtue-head p { font-size: 14px; color: var(--ink-soft); margin: 0 0 20px; line-height: 1.6; }
+
+  .strength-block { margin-bottom: 30px; }
+  .strength-name {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin: 0 0 10px;
+    letter-spacing: 0.02em;
+  }
+  .item { margin-bottom: 18px; }
+  .item p { font-size: 16px; line-height: 1.6; margin: 0 0 10px; }
+  .scale { display: flex; gap: 6px; }
+  .scale button {
+    flex: 1;
+    height: 42px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .scale button.sel {
+    background: var(--v-color, var(--accent));
+    border-color: var(--v-color, var(--accent));
+    color: #fff;
+  }
+  .scale-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-soft); margin-top: 5px; }
+
+  /* ---- results ---- */
+  .results-hero { text-align: center; padding: 10px 0 8px; }
+  .results-hero .eyebrow { font-size: 13px; color: var(--ink-soft); margin-bottom: 8px; }
+  .results-hero h1 { font-size: 26px; margin: 0 0 6px; }
+  .results-hero p { color: var(--ink-soft); font-size: 15px; margin: 0; }
+
+  .radar-wrap { margin: 26px 0 6px; display: flex; justify-content: center; }
+  .radar-wrap svg { width: 100%; max-width: 420px; height: auto; overflow: visible; }
+
+  .rank-list { margin-top: 30px; }
+  .rank-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .rank-num { font-size: 13px; color: var(--ink-soft); width: 18px; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+  .rank-main { flex: 1; min-width: 0; }
+  .rank-top-line { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .rank-name { font-size: 15px; }
+  .rank-badge {
+    font-size: 10.5px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    flex-shrink: 0;
+  }
+  .rank-bar-track { height: 6px; border-radius: 3px; background: var(--bg-raise); overflow: hidden; }
+  .rank-bar-fill { height: 100%; border-radius: 3px; background: var(--bar-color, var(--accent)); }
+  .rank-score { font-size: 13px; color: var(--ink-soft); width: 30px; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+
+  .virtue-summary { margin-top: 30px; }
+  .vs-row { padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .vs-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .vs-name { font-size: 15px; display: flex; align-items: center; gap: 7px; }
+  .vs-name i { width: 8px; height: 8px; border-radius: 50%; }
+  .vs-score { font-size: 13px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .vs-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+
+  .share-box { margin-top: 34px; }
+  .share-link {
+    display: block;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    background: var(--bg-raise);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 12px;
+    word-break: break-all;
+    margin-bottom: 10px;
+  }
+
+  .missing-hint { font-size: 13px; color: var(--v-courage); margin-top: 4px; min-height: 16px; }
+
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+</style>
+</head>
+<body>
+
+<div class="topbar" id="topbar" style="display:none;">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-title">性格优势自测</span>
+      <span class="brand-count" id="progressCount">0 / 72</span>
+    </div>
+    <div class="segs" id="segs"></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section class="screen active" id="screen-intro">
+    <div class="hero">
+      <h1 class="serif">24 种性格优势自测</h1>
+      <p>这份量表帮助你了解自己身上最突出的性格优势，并对应到智慧、勇气、仁爱、正义、节制、超越这六大美德。整个测试共 72 道题，分成六个部分，大约需要 10–15 分钟。</p>
+      <p>请凭第一直觉作答——没有标准答案，只有更真实的你。</p>
+    </div>
+    <div class="virtue-chips" id="introChips"></div>
+    <button class="btn" id="startBtn">开始测试</button>
+    <p class="note">测完可生成专属优势画像，并一键分享给朋友自测</p>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="screen" id="screen-quiz">
+    <div id="quizVirtueHead" class="virtue-head"></div>
+    <div id="quizItems"></div>
+    <div class="missing-hint" id="missingHint"></div>
+    <div class="btn-row">
+      <button class="btn ghost" id="prevBtn">上一步</button>
+      <button class="btn" id="nextBtn">下一步</button>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="screen" id="screen-results">
+    <div class="results-hero">
+      <div class="eyebrow serif">你的优势画像</div>
+      <h1 class="serif" id="topStrengthName">—</h1>
+      <p id="topStrengthDesc"></p>
+    </div>
+
+    <div class="radar-wrap"><svg id="radarSvg" viewBox="0 0 340 340"></svg></div>
+
+    <div class="virtue-summary" id="virtueSummary"></div>
+
+    <div class="rank-list">
+      <h2 class="serif" style="font-size:18px; margin: 0 0 4px;">24 项优势完整排名</h2>
+      <p style="font-size:13px; color:var(--ink-soft); margin:0 0 12px;">前五项为你的「标志性优势」</p>
+      <div id="rankRows"></div>
+    </div>
+
+    <div class="share-box">
+      <h2 class="serif" style="font-size:18px; margin:0 0 10px;">分享给朋友，看看他们的优势画像</h2>
+      <span class="share-link" id="shareUrl"></span>
+      <div class="btn-row" style="margin-top:0;">
+        <button class="btn ghost" id="copyBtn">复制链接</button>
+        <button class="btn" id="retakeBtn">重新测一次</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // The public share link for this page (do not use window.location.href —
+  // that resolves to an internal sandbox URL inside a published artifact).
+  var PUBLIC_URL = "https://claude.ai/artifact/T87p9DBYXEh7RtHxeoT9e6";
+
+  // ---------- data ----------
+  var VIRTUES = [
+    { id: "wisdom",         name: "智慧与知识", color: "var(--v-wisdom)",         desc: "获取和运用知识，以做出更好判断、看清事物本质的能力。" },
+    { id: "courage",        name: "勇气",       color: "var(--v-courage)",        desc: "面对内外部阻力时，依然坚持做正确之事的意志力量。" },
+    { id: "humanity",       name: "仁爱",       color: "var(--v-humanity)",       desc: "关心、善待他人，建立并维系亲密关系的人际优势。" },
+    { id: "justice",        name: "正义",       color: "var(--v-justice)",        desc: "支撑健康集体与社会生活的公民美德。" },
+    { id: "temperance",     name: "节制",       color: "var(--v-temperance)",     desc: "防止过度、保持适度并约束自我的力量。" },
+    { id: "transcendence",  name: "超越",       color: "var(--v-transcendence)",  desc: "与更广阔的世界建立连接、为生活赋予意义的力量。" }
+  ];
+
+  var STRENGTHS = [
+    // wisdom
+    { id:"creativity",  virtue:"wisdom", name:"创造力", items:[
+      "我常常能想出新颖独特的方法解决问题。",
+      "我喜欢尝试与众不同的做法，而不是墨守成规。",
+      "别人常说我很有想象力。"] },
+    { id:"curiosity",  virtue:"wisdom", name:"好奇心", items:[
+      "我对新事物、新知识总是充满探索欲。",
+      "遇到不懂的问题，我会主动去查资料弄清楚。",
+      "我喜欢体验从未接触过的事物或领域。"] },
+    { id:"judgment",  virtue:"wisdom", name:"判断力", items:[
+      "做决定前，我会全面权衡各种证据和观点。",
+      "我不轻易相信一面之词，会独立思考判断。",
+      "我能理性分析问题，不容易被情绪左右。"] },
+    { id:"loveoflearning",  virtue:"wisdom", name:"好学", items:[
+      "我享受学习新知识和技能的过程。",
+      "即使没有考试或任务要求，我也愿意主动学习。",
+      "我常常花时间钻研自己感兴趣的领域。"] },
+    { id:"perspective",  virtue:"wisdom", name:"洞察力", items:[
+      "朋友遇到困惑时常会来找我寻求建议。",
+      "我能从更宏观的角度看待问题，给出中肯的看法。",
+      "我善于把复杂的道理讲清楚，帮别人理清思路。"] },
+    // courage
+    { id:"bravery",  virtue:"courage", name:"勇敢", items:[
+      "即使面对压力或反对，我也会坚持做我认为对的事。",
+      "遇到困难或有挑战的情况，我不会轻易退缩。",
+      "我敢于为自己的立场发声，即使不受欢迎。"] },
+    { id:"perseverance",  virtue:"courage", name:"坚毅", items:[
+      "一旦开始一件事，我会努力坚持把它完成。",
+      "遇到挫折时，我会继续尝试而不轻易放弃。",
+      "我能克服拖延，把任务坚持做完。"] },
+    { id:"honesty",  virtue:"courage", name:"诚实", items:[
+      "我说话做事表里如一，很少伪装自己。",
+      "即使说真话会带来不便，我也倾向于坦诚。",
+      "我对自己的行为和承诺负责。"] },
+    { id:"zest",  virtue:"courage", name:"热忱", items:[
+      "我对生活和工作充满热情与活力。",
+      "早晨醒来，我通常期待新的一天。",
+      "我做事情时常常全情投入，充满干劲。"] },
+    // humanity
+    { id:"love",  virtue:"humanity", name:"爱", items:[
+      "我很珍惜和亲近的人之间亲密的关系。",
+      "我愿意向重要的人表达关心和爱意。",
+      "与他人建立深厚的情感连接对我很重要。"] },
+    { id:"kindness",  virtue:"humanity", name:"善良", items:[
+      "我乐于主动帮助有需要的人。",
+      "看到别人遇到困难，我会想办法伸出援手。",
+      "我常常关心他人的感受，愿意为他人付出。"] },
+    { id:"socialintelligence",  virtue:"humanity", name:"社交智慧", items:[
+      "我能敏锐察觉他人的情绪和想法。",
+      "我善于根据不同场合调整自己的言行举止。",
+      "我能理解他人行为背后的动机。"] },
+    // justice
+    { id:"teamwork",  virtue:"justice", name:"团队合作", items:[
+      "在团队中，我愿意为共同目标贡献自己的力量。",
+      "我能与不同性格的人合作共事。",
+      "我重视集体利益，愿意配合团队安排。"] },
+    { id:"fairness",  virtue:"justice", name:"公平", items:[
+      "我对待所有人都尽量一视同仁，不偏袒。",
+      "做决定时，我会考虑对各方是否公平。",
+      "我不会因为个人喜好而区别对待他人。"] },
+    { id:"leadership",  virtue:"justice", name:"领导力", items:[
+      "在团队中，我常常能组织协调大家共同完成任务。",
+      "我善于激励他人朝共同目标努力。",
+      "别人常常认可我在团队中的组织能力。"] },
+    // temperance
+    { id:"forgiveness",  virtue:"temperance", name:"宽恕", items:[
+      "别人伤害了我，我愿意给予原谅而不长期记恨。",
+      "我能放下过去的怨恨，重新开始。",
+      "我很少因为过去的不愉快而心怀报复。"] },
+    { id:"humility",  virtue:"temperance", name:"谦逊", items:[
+      "我不喜欢炫耀自己的成就。",
+      "我能坦然承认自己的不足和错误。",
+      "我认为自己的成功离不开他人的帮助。"] },
+    { id:"prudence",  virtue:"temperance", name:"审慎", items:[
+      "做决定前，我会仔细考虑可能的后果。",
+      "我不会因一时冲动而做出让自己后悔的事。",
+      "我做事情比较谨慎，会提前规划。"] },
+    { id:"selfregulation",  virtue:"temperance", name:"自我控制", items:[
+      "我能很好地控制自己的情绪和冲动。",
+      "面对诱惑，我能坚持自己的原则和计划。",
+      "我能约束自己的行为，即使没人监督。"] },
+    // transcendence
+    { id:"appreciation",  virtue:"transcendence", name:"对美和卓越的欣赏", items:[
+      "我常常被自然、艺术或卓越的表现所打动。",
+      "我会花时间欣赏生活中美好的事物。",
+      "看到出色的作品或成就，我会由衷赞叹。"] },
+    { id:"gratitude",  virtue:"transcendence", name:"感恩", items:[
+      "我常常意识到自己拥有的美好事物并心存感激。",
+      "我会主动向帮助过我的人表达谢意。",
+      "我很少把别人的付出视为理所当然。"] },
+    { id:"hope",  virtue:"transcendence", name:"希望", items:[
+      "我对未来抱有积极乐观的期待。",
+      "即使当下困难，我也相信情况会变好。",
+      "我常常为自己设定目标并相信能够实现。"] },
+    { id:"humor",  virtue:"transcendence", name:"幽默", items:[
+      "我喜欢用幽默为自己和他人带来快乐。",
+      "即使处境艰难，我也能找到轻松的一面。",
+      "朋友常说和我在一起很开心、很有趣。"] },
+    { id:"spirituality",  virtue:"transcendence", name:"灵性 / 生命意义感", items:[
+      "我对生命的意义和目的有自己的思考。",
+      "我相信自己的生活有超越日常琐事的意义。",
+      "我常常思考自己与更宏大事物（信仰、宇宙、使命等）的联系。"] }
+  ];
+
+  var virtueById = {};
+  VIRTUES.forEach(function (v) { virtueById[v.id] = v; });
+
+  var pages = VIRTUES.map(function (v) {
+    return { virtue: v, strengths: STRENGTHS.filter(function (s) { return s.virtue === v.id; }) };
+  });
+
+  var totalItems = STRENGTHS.length * 3;
+
+  // ---------- state ----------
+  var answers = {}; // key: strengthId + "-" + itemIndex -> 1..5
+  var pageIndex = 0;
+
+  // ---------- elements ----------
+  var screens = {
+    intro: document.getElementById("screen-intro"),
+    quiz: document.getElementById("screen-quiz"),
+    results: document.getElementById("screen-results")
+  };
+  var topbar = document.getElementById("topbar");
+  var segsEl = document.getElementById("segs");
+  var progressCountEl = document.getElementById("progressCount");
+  var introChips = document.getElementById("introChips");
+  var quizVirtueHead = document.getElementById("quizVirtueHead");
+  var quizItems = document.getElementById("quizItems");
+  var missingHint = document.getElementById("missingHint");
+  var prevBtn = document.getElementById("prevBtn");
+  var nextBtn = document.getElementById("nextBtn");
+
+  function showScreen(name) {
+    Object.keys(screens).forEach(function (k) {
+      screens[k].classList.toggle("active", k === name);
+    });
+    topbar.style.display = name === "quiz" ? "block" : "none";
+    window.scrollTo(0, 0);
+  }
+
+  // ---------- intro ----------
+  VIRTUES.forEach(function (v) {
+    var chip = document.createElement("span");
+    chip.className = "chip";
+    chip.style.setProperty("--dot", v.color);
+    chip.innerHTML = '<i></i>' + v.name;
+    introChips.appendChild(chip);
+  });
+
+  // ---------- segments ----------
+  pages.forEach(function () {
+    var seg = document.createElement("div");
+    seg.className = "seg";
+    var fill = document.createElement("i");
+    seg.appendChild(fill);
+    segsEl.appendChild(seg);
+  });
+
+  function updateProgress() {
+    var answered = Object.keys(answers).length;
+    progressCountEl.textContent = answered + " / " + totalItems;
+    pages.forEach(function (p, i) {
+      var segFill = segsEl.children[i].firstChild;
+      segFill.style.setProperty("--seg-color", p.virtue.color);
+      var total = p.strengths.length * 3;
+      var done = 0;
+      p.strengths.forEach(function (s) {
+        for (var k = 0; k < 3; k++) if (answers[s.id + "-" + k] != null) done++;
+      });
+      var pct = i < pageIndex ? 100 : (i === pageIndex ? (done / total) * 100 : (i < pageIndex ? 100 : 0));
+      segFill.style.width = pct + "%";
+    });
+  }
+
+  // ---------- render quiz page ----------
+  function renderPage() {
+    var page = pages[pageIndex];
+    var v = page.virtue;
+
+    quizVirtueHead.innerHTML =
+      '<div class="tag" style="--v-color:' + v.color + '"><i></i>第 ' + (pageIndex + 1) + ' / ' + pages.length + ' 部分</div>' +
+      '<h2 class="serif">' + v.name + '</h2>' +
+      '<p>' + v.desc + '</p>';
+
+    quizItems.innerHTML = "";
+    page.strengths.forEach(function (s) {
+      var block = document.createElement("div");
+      block.className = "strength-block";
+      var label = document.createElement("p");
+      label.className = "strength-name";
+      label.textContent = s.name;
+      block.appendChild(label);
+
+      s.items.forEach(function (text, idx) {
+        var key = s.id + "-" + idx;
+        var item = document.createElement("div");
+        item.className = "item";
+
+        var p = document.createElement("p");
+        p.textContent = text;
+        item.appendChild(p);
+
+        var scale = document.createElement("div");
+        scale.className = "scale";
+        scale.style.setProperty("--v-color", v.color);
+        for (var val = 1; val <= 5; val++) {
+          (function (val) {
+            var b = document.createElement("button");
+            b.type = "button";
+            b.textContent = val;
+            if (answers[key] === val) b.classList.add("sel");
+            b.addEventListener("click", function () {
+              answers[key] = val;
+              var sibs = scale.querySelectorAll("button");
+              for (var i = 0; i < sibs.length; i++) sibs[i].classList.remove("sel");
+              b.classList.add("sel");
+              missingHint.textContent = "";
+              updateProgress();
+            });
+            scale.appendChild(b);
+          })(val);
+        }
+        item.appendChild(scale);
+
+        var labels = document.createElement("div");
+        labels.className = "scale-labels";
+        labels.innerHTML = "<span>完全不符合</span><span>完全符合</span>";
+        item.appendChild(labels);
+
+        block.appendChild(item);
+      });
+
+      quizItems.appendChild(block);
+    });
+
+    prevBtn.disabled = pageIndex === 0;
+    nextBtn.textContent = pageIndex === pages.length - 1 ? "查看结果" : "下一步";
+    missingHint.textContent = "";
+    updateProgress();
+  }
+
+  function pageComplete(i) {
+    var page = pages[i];
+    for (var si = 0; si < page.strengths.length; si++) {
+      for (var k = 0; k < 3; k++) {
+        if (answers[page.strengths[si].id + "-" + k] == null) return false;
+      }
+    }
+    return true;
+  }
+
+  document.getElementById("startBtn").addEventListener("click", function () {
+    pageIndex = 0;
+    renderPage();
+    showScreen("quiz");
+  });
+
+  prevBtn.addEventListener("click", function () {
+    if (pageIndex === 0) return;
+    pageIndex--;
+    renderPage();
+  });
+
+  nextBtn.addEventListener("click", function () {
+    if (!pageComplete(pageIndex)) {
+      missingHint.textContent = "请先回答完这一部分的所有题目，再继续。";
+      return;
+    }
+    if (pageIndex < pages.length - 1) {
+      pageIndex++;
+      renderPage();
+    } else {
+      computeAndShowResults();
+    }
+  });
+
+  // ---------- results ----------
+  function computeAndShowResults() {
+    var strengthScores = STRENGTHS.map(function (s) {
+      var sum = 0;
+      for (var k = 0; k < 3; k++) sum += answers[s.id + "-" + k];
+      return { strength: s, score: sum / 3 };
+    });
+
+    var virtueScores = VIRTUES.map(function (v) {
+      var members = strengthScores.filter(function (r) { return r.strength.virtue === v.id; });
+      var sum = members.reduce(function (a, r) { return a + r.score; }, 0);
+      return { virtue: v, score: sum / members.length };
+    });
+
+    var ranked = strengthScores.slice().sort(function (a, b) { return b.score - a.score; });
+
+    // hero
+    var top = ranked[0];
+    document.getElementById("topStrengthName").textContent = top.strength.name;
+    document.getElementById("topStrengthDesc").textContent =
+      "你最突出的标志性优势，隶属于「" + virtueById[top.strength.virtue].name + "」这一美德。";
+
+    // radar
+    drawRadar(virtueScores);
+
+    // virtue summary
+    var vsWrap = document.getElementById("virtueSummary");
+    vsWrap.innerHTML = "";
+    virtueScores.slice().sort(function (a,b){ return b.score - a.score; }).forEach(function (r) {
+      var row = document.createElement("div");
+      row.className = "vs-row";
+      row.innerHTML =
+        '<div class="vs-top">' +
+          '<span class="vs-name"><i style="background:' + r.virtue.color + '"></i>' + r.virtue.name + '</span>' +
+          '<span class="vs-score">' + r.score.toFixed(1) + ' / 5</span>' +
+        '</div>' +
+        '<div class="vs-desc">' + r.virtue.desc + '</div>';
+      vsWrap.appendChild(row);
+    });
+
+    // rank list
+    var rankWrap = document.getElementById("rankRows");
+    rankWrap.innerHTML = "";
+    ranked.forEach(function (r, i) {
+      var v = virtueById[r.strength.virtue];
+      var row = document.createElement("div");
+      row.className = "rank-row";
+      row.innerHTML =
+        '<span class="rank-num">' + (i + 1) + '</span>' +
+        '<div class="rank-main">' +
+          '<div class="rank-top-line">' +
+            '<span class="rank-name">' + r.strength.name + '</span>' +
+            (i < 5 ? '<span class="rank-badge">标志性</span>' : '') +
+          '</div>' +
+          '<div class="rank-bar-track"><div class="rank-bar-fill" style="--bar-color:' + v.color + ';width:' + (r.score/5*100) + '%"></div></div>' +
+        '</div>' +
+        '<span class="rank-score">' + r.score.toFixed(1) + '</span>';
+      rankWrap.appendChild(row);
+    });
+
+    // share url
+    var shareUrlEl = document.getElementById("shareUrl");
+    shareUrlEl.textContent = PUBLIC_URL;
+
+    showScreen("results");
+  }
+
+  function drawRadar(virtueScores) {
+    var svg = document.getElementById("radarSvg");
+    var ns = "http://www.w3.org/2000/svg";
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    var cx = 170, cy = 170, maxR = 118;
+    var n = virtueScores.length;
+    var angleFor = function (i) { return -Math.PI / 2 + (i * 2 * Math.PI / n); };
+    var pointFor = function (i, r) {
+      var a = angleFor(i);
+      return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+    };
+
+    function el(tag, attrs) {
+      var e = document.createElementNS(ns, tag);
+      for (var k in attrs) e.setAttribute(k, attrs[k]);
+      return e;
+    }
+
+    // grid rings at score 1..5
+    for (var ring = 1; ring <= 5; ring++) {
+      var r = maxR * (ring / 5);
+      var pts = [];
+      for (var i = 0; i < n; i++) pts.push(pointFor(i, r).join(","));
+      svg.appendChild(el("polygon", {
+        points: pts.join(" "),
+        fill: "none",
+        stroke: "var(--line)",
+        "stroke-width": ring === 5 ? 1.2 : 0.8
+      }));
+    }
+
+    // axes
+    for (i = 0; i < n; i++) {
+      var p = pointFor(i, maxR);
+      svg.appendChild(el("line", { x1: cx, y1: cy, x2: p[0], y2: p[1], stroke: "var(--line)", "stroke-width": 0.8 }));
+    }
+
+    // data polygon
+    var dataPts = virtueScores.map(function (r, i) { return pointFor(i, (r.score / 5) * maxR); });
+    svg.appendChild(el("polygon", {
+      points: dataPts.map(function (p) { return p.join(","); }).join(" "),
+      fill: "var(--accent)",
+      "fill-opacity": "0.28",
+      stroke: "var(--accent)",
+      "stroke-width": 2,
+      "stroke-linejoin": "round"
+    }));
+
+    // vertex dots
+    virtueScores.forEach(function (r, i) {
+      var p = dataPts[i];
+      svg.appendChild(el("circle", { cx: p[0], cy: p[1], r: 4.5, fill: r.virtue.color }));
+    });
+
+    // labels
+    virtueScores.forEach(function (r, i) {
+      var lp = pointFor(i, maxR + 30);
+      var t = el("text", {
+        x: lp[0], y: lp[1],
+        "text-anchor": Math.abs(lp[0] - cx) < 4 ? "middle" : (lp[0] > cx ? "start" : "end"),
+        "dominant-baseline": Math.abs(lp[1] - cy) < 4 ? "middle" : (lp[1] > cy ? "hanging" : "auto"),
+        fill: r.virtue.color,
+        "font-size": "12.5",
+        "font-family": "-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+      });
+      t.textContent = r.virtue.name;
+      svg.appendChild(t);
+
+      var t2 = el("text", {
+        x: lp[0], y: lp[1] + (lp[1] > cy ? 15 : (Math.abs(lp[1]-cy) < 4 ? 15 : -15)),
+        "text-anchor": t.getAttribute("text-anchor"),
+        fill: "var(--ink-soft)",
+        "font-size": "11"
+      });
+      t2.textContent = r.score.toFixed(1);
+      svg.appendChild(t2);
+    });
+  }
+
+  // ---------- share / retake ----------
+  document.getElementById("copyBtn").addEventListener("click", function () {
+    var url = PUBLIC_URL;
+    var btn = this;
+    function done(ok) {
+      btn.textContent = ok ? "已复制链接" : "复制失败，请手动复制";
+      setTimeout(function () { btn.textContent = "复制链接"; }, 1800);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function () { done(true); }).catch(function () { done(false); });
+    } else {
+      try {
+        var ta = document.createElement("textarea");
+        ta.value = url;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        done(true);
+      } catch (e) { done(false); }
+    }
+  });
+
+  document.getElementById("retakeBtn").addEventListener("click", function () {
+    answers = {};
+    pageIndex = 0;
+    renderPage();
+    showScreen("intro");
+  });
+
+})();
+</script>
+</body>
+</html>
